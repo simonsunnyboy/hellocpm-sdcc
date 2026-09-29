@@ -93,7 +93,7 @@ macro(add_cpm_executable TARGET_NAME)
 	set(COM_FILE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.com")
 	add_custom_command(
 		OUTPUT "${COM_FILE}"
-		COMMAND "${SREC_CAT_EXECUTABLE}" -disable-sequence-warning "$<TARGET_FILE:${TARGET_NAME}>" -Intel -offset -${CPM_CODE_LOC} -o "${COM_FILE}" -binary
+		COMMAND "${SREC_CAT_EXECUTABLE}" -disable-sequence-warning "$<TARGET_FILE:${TARGET_NAME}>" -Intel -offset -${CPM_CODE_LOC} -fill 0x00 -within "$<TARGET_FILE:${TARGET_NAME}>" -Intel -offset -${CPM_CODE_LOC} -range-pad 128 -o "${COM_FILE}" -binary
 		DEPENDS ${TARGET_NAME}
 		VERBATIM
 	)
