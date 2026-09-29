@@ -6,6 +6,12 @@
 # assembler, then force the generated output to match the CP/M conventions used by
 # this project.
 
+#
+# SDCC version used: 4.5.12
+# Associated tooling: sdasz80 (ASxxxx V05.50.4+NoICE+SDCCmods-WIP3) and
+# srec_cat 1.64.D001
+#
+
 # Default load address for the generated code inside a CP/M executable.
 # CP/M programs are normally loaded at 0x0100, so we keep this configurable in case
 # the project needs a different start address later.
