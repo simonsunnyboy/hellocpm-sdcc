@@ -10,6 +10,7 @@
 # CP/M programs are normally loaded at 0x0100, so we keep this configurable in case
 # the project needs a different start address later.
 set(CPM_CODE_LOC "0x0100" CACHE STRING "CP/M load address for executable code")
+find_program(SREC_CAT_EXECUTABLE srec_cat REQUIRED)
 
 # Guard against re-running the toolchain setup multiple times during the same
 # CMake configure process. This is important because this file is included before
@@ -63,3 +64,27 @@ set(CMAKE_EXECUTABLE_SUFFIX ".ihx")
 # effect across the configuration and build. This ensures the project continues to use
 # the same cross-compilation rules throughout the build lifecycle.
 set(CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_FILE}")
+
+# Provide a macro to generate a CP/M .COM file from the .ihx output. 
+# This macro wraps the add_executable() call and adds a custom command to convert the .ihx file into a .COM file using srec_cat.
+macro(add_cpm_executable TARGET_NAME)
+	add_executable(${TARGET_NAME} 
+				${CMAKE_CURRENT_SOURCE_DIR}/cpm-crt0.s # The startup code must come first
+				${ARGN}
+				)
+	set_target_properties(${TARGET_NAME} PROPERTIES SUFFIX ".ihx")
+	# The linker options force the DATA segment to be placed after the code segment as CP/M machines may have variable memory sizes.
+	# Thus fixed data segment locations are not recommended.
+	target_link_options(${TARGET_NAME} PRIVATE
+		"-Wl-b _DATA = s__CODE + l__CODE + l__HOME + l__INITIALIZER + l__GSINIT + l__GSFINAL"
+	)
+
+	set(COM_FILE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.com")
+	add_custom_command(
+		OUTPUT "${COM_FILE}"
+		COMMAND "${SREC_CAT_EXECUTABLE}" "$<TARGET_FILE:${TARGET_NAME}>" -Intel -offset -${CPM_CODE_LOC} -o "${COM_FILE}" -binary
+		DEPENDS ${TARGET_NAME}
+		VERBATIM
+	)
+	add_custom_target(${TARGET_NAME}_com ALL DEPENDS "${COM_FILE}")
+endmacro()
