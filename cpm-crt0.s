@@ -9,6 +9,11 @@
 	.globl  ___sdcc_external_startup
 	.globl  l__DATA
 	.globl  s__DATA
+	.globl  s__CODE
+	.globl  l__CODE
+	.globl  l__HOME
+	.globl  l__GSINIT
+	.globl  l__GSFINAL
 	.globl  l__INITIALIZER
 	.globl  s__INITIALIZER
 	.globl  s__INITIALIZED

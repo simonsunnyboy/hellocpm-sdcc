@@ -11,6 +11,9 @@ file(GLOB ASM_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.s")
 list(REMOVE_ITEM ASM_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/cpm-crt0.s")
 add_executable(hellocpm "${CMAKE_CURRENT_SOURCE_DIR}/cpm-crt0.s" ${C_SOURCES} ${ASM_SOURCES})
 set_target_properties(hellocpm PROPERTIES SUFFIX ".ihx")
+target_link_options(hellocpm PRIVATE
+	"-Wl-b _DATA = s__CODE + l__CODE + l__HOME + l__INITIALIZER + l__GSINIT + l__GSFINAL"
+)
 
 set(COM_FILE "${CMAKE_CURRENT_BINARY_DIR}/hellocpm.com")
 add_custom_command(
