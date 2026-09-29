@@ -16,6 +16,7 @@
 # CP/M programs are normally loaded at 0x0100, so we keep this configurable in case
 # the project needs a different start address later.
 set(CPM_CODE_LOC "0x0100" CACHE STRING "CP/M load address for executable code")
+set(CPM_CRT0_FILE "" CACHE FILEPATH "Optional replacement CP/M C runtime startup file")
 find_program(SREC_CAT_EXECUTABLE srec_cat REQUIRED)
 
 # Guard against re-running the toolchain setup multiple times during the same
@@ -74,8 +75,12 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_FILE}")
 # Provide a macro to generate a CP/M .COM file from the .ihx output. 
 # This macro wraps the add_executable() call and adds a custom command to convert the .ihx file into a .COM file using srec_cat.
 macro(add_cpm_executable TARGET_NAME)
+	set(_CPM_CRT0_FILE "${CPM_CRT0_FILE}")
+	if(NOT _CPM_CRT0_FILE)
+		set(_CPM_CRT0_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cpm-crt0.s")
+	endif()
 	add_executable(${TARGET_NAME} 
-				${CMAKE_CURRENT_SOURCE_DIR}/cpm-crt0.s # The startup code must come first
+				${_CPM_CRT0_FILE} # The startup code must come first
 				${ARGN}
 				)
 	set_target_properties(${TARGET_NAME} PROPERTIES SUFFIX ".ihx")
