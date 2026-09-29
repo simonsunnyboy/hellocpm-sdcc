@@ -1,7 +1,13 @@
-;--------------------------------------------------------------------------
-;  cpm_crt0.s - Updated sdcc crt0.s for a Z80 for use with CP/M 2.x and up
-;
-;--------------------------------------------------------------------------
+	;--------------------------------------------------------------------------
+	; cpm_crt0.s - Updated sdcc crt0.s for a Z80 for use with CP/M 2.x and up
+    ; 
+    ; The stack is located right in front of the BDOS overlapping the CCP.
+	; Return to CP/M is via a CP/M warmboot by jump to 0.
+	; There is no argument parsing involved.
+    ;
+    ; Copyright (c) 2026 Matthias Arndt <marndt@final-memory.org>
+    ; The MIT License (MIT) applies. See file LICENSE for details.
+	;--------------------------------------------------------------------------
 
 	.module crt0
 	.optsdcc -mz80 sdcccall(1)

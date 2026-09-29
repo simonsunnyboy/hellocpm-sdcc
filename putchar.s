@@ -1,3 +1,12 @@
+    ;--------------------------------------------------------------------------
+    ; putchar.s - CP/M 2.x implementation of the libc putchar function using BDOS calls
+    ;
+    ; Uses SDCC calling convetion sdcccall(1)
+    ;
+    ; Copyright (c) 2026 Matthias Arndt <marndt@final-memory.org>
+    ; The MIT License (MIT) applies. See file LICENSE for details.
+    ;--------------------------------------------------------------------------
+
     .module putchar
     .area _CODE
 

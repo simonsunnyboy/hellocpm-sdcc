@@ -1,3 +1,9 @@
+#
+# cpm.cmake - CMake toolchain for building z80 programs for CP/M with SDCC V4.5.x
+#
+# Copyright (c) 2026 Matthias Arndt <marndt@final-memory.org>
+# The MIT License (MIT) applies. See file LICENSE for details.
+#
 # This file is a CMake toolchain definition for building z80 programs for CP/M.
 #
 # CMake normally expects a host compiler for the current machine, but this project
